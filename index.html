@@ -37,12 +37,12 @@ body::after{
 /* STAGES – fully responsive & scrollable */
 .stage{
   display:none;flex-direction:column;align-items:center;justify-content:flex-start;
-  width:100vw;height:100dvh; /* dynamic viewport height */
+  width:100vw;height:100dvh;
   position:fixed;top:0;left:0;right:0;bottom:0;
   z-index:10;text-align:center;
   overflow-y:auto;overflow-x:hidden;
   padding:clamp(1rem, 5vw, 2rem) clamp(0.8rem, 4vw, 2rem);
-  -webkit-overflow-scrolling:touch; /* smooth scroll on iOS */
+  -webkit-overflow-scrolling:touch;
 }
 .stage.active{display:flex}
 .stage.in{animation:stageIn .9s cubic-bezier(.22,1,.36,1) both}
@@ -50,7 +50,7 @@ body::after{
 @keyframes stageIn{from{opacity:0;transform:scale(.93) translateY(30px)}to{opacity:1;transform:none}}
 @keyframes stageOut{from{opacity:1}to{opacity:0;transform:scale(1.04)}}
 
-/* CARD – flexible padding */
+/* CARD */
 .card{
   background:linear-gradient(145deg,rgba(25,15,40,.97),rgba(15,10,28,.99));
   border:1px solid rgba(255,107,157,.2);border-radius:20px;
@@ -64,7 +64,7 @@ body::after{
   background:linear-gradient(90deg,transparent,var(--pink),transparent);
 }
 
-/* TYPOGRAPHY – responsive font sizes */
+/* TYPOGRAPHY */
 h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem, 8vw, 3rem);font-weight:900;line-height:1.1;background:linear-gradient(135deg,var(--pink2),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
 h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem, 5vw, 2rem);font-weight:700;color:var(--pink2);margin-bottom:.7rem}
 .script{font-family:'Dancing Script',cursive;font-size:clamp(1.4rem, 6vw, 2.4rem);color:var(--gold2);line-height:1.3}
@@ -73,7 +73,7 @@ p{font-size:clamp(0.85rem, 2.5vw, 0.95rem);line-height:1.85;color:#c0a8c8;margin
 .tagline{font-size:clamp(0.9rem, 2.8vw, 1rem);font-style:italic;color:#d4b0d4;margin:.5rem 0}
 em{color:var(--pink2)}
 
-/* HEARTS, BURSTS, RIPPLE, SPARKLE, COMBO (unchanged) */
+/* HEARTS etc. */
 .heart-float{position:fixed;pointer-events:none;z-index:9999;animation:heartRise linear forwards}
 @keyframes heartRise{0%{transform:translateY(0) scale(1) rotate(var(--r));opacity:1}100%{transform:translateY(-110vh) scale(.3) rotate(var(--r2));opacity:0}}
 .tap-burst{position:fixed;pointer-events:none;z-index:9999;font-size:1.6rem;font-weight:bold;animation:tapPop .7s cubic-bezier(.22,1,.36,1) forwards;transform-origin:center}
@@ -85,7 +85,7 @@ em{color:var(--pink2)}
 .combo-text{position:fixed;pointer-events:none;z-index:9999;font-family:'Dancing Script',cursive;font-size:1.4rem;font-weight:700;color:var(--gold2);text-shadow:0 0 10px rgba(255,230,128,.6);animation:comboRise .9s ease-out forwards}
 @keyframes comboRise{0%{transform:translateY(0) scale(0.5);opacity:1}60%{transform:translateY(-40px) scale(1.1);opacity:1}100%{transform:translateY(-80px) scale(.8);opacity:0}}
 
-/* BUTTONS – responsive tap targets */
+/* BUTTONS */
 .btn{
   display:inline-block;margin:.4rem;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 4vw, 1.8rem);
   font-family:'Raleway',sans-serif;font-size:clamp(0.7rem, 2vw, 0.85rem);font-weight:600;
@@ -101,7 +101,7 @@ em{color:var(--pink2)}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e0a800);color:#1a0a00;box-shadow:0 4px 20px rgba(245,200,66,.35)}
 .btn-gold:hover{box-shadow:0 8px 30px rgba(245,200,66,.55)}
 
-/* EGG – responsive size */
+/* EGG */
 .egg-container{
   position:relative;width:min(160px, 40vw);height:auto;aspect-ratio:180/216;
   margin:.6rem auto;cursor:pointer;filter:drop-shadow(0 0 30px rgba(255,107,157,.3));
@@ -120,34 +120,17 @@ em{color:var(--pink2)}
 .egg-tap-hint{font-size:clamp(0.62rem, 1.8vw, 0.72rem);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:.4rem;animation:blink2 1.5s ease-in-out infinite}
 @keyframes blink2{0%,100%{opacity:.4}50%{opacity:1}}
 
-/* LOCK DIALS – compact & responsive */
-.lock-dials{
-  display:flex;flex-direction:column;align-items:center;gap:clamp(0.6rem, 2vw, 1rem);margin:1rem 0;
-}
-.dial-row{
-  display:flex;gap:clamp(0.3rem, 1.5vw, 0.5rem);justify-content:center;align-items:center;flex-wrap:wrap;
-}
+/* LOCK DIALS */
+.lock-dials{display:flex;flex-direction:column;align-items:center;gap:clamp(0.6rem, 2vw, 1rem);margin:1rem 0;}
+.dial-row{display:flex;gap:clamp(0.3rem, 1.5vw, 0.5rem);justify-content:center;align-items:center;flex-wrap:wrap;}
 .dial-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem}
-.dial-display{
-  width:clamp(40px, 10vw, 48px);height:clamp(54px, 13vw, 64px);
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,107,157,.25);border-radius:10px;
-  font-family:'Playfair Display',serif;font-size:clamp(1.4rem, 5vw, 1.8rem);font-weight:700;color:var(--cream);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;position:relative;overflow:hidden;transition:all .2s;
-  box-shadow:inset 0 2px 10px rgba(0,0,0,.4);user-select:none;touch-action:manipulation;
-}
+.dial-display{width:clamp(40px, 10vw, 48px);height:clamp(54px, 13vw, 64px);background:rgba(255,255,255,.04);border:1px solid rgba(255,107,157,.25);border-radius:10px;font-family:'Playfair Display',serif;font-size:clamp(1.4rem, 5vw, 1.8rem);font-weight:700;color:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:all .2s;box-shadow:inset 0 2px 10px rgba(0,0,0,.4);user-select:none;touch-action:manipulation;}
 .dial-display:hover{border-color:var(--pink);box-shadow:0 0 20px rgba(255,107,157,.2),inset 0 2px 10px rgba(0,0,0,.4)}
 .dial-display::before,.dial-display::after{content:'';position:absolute;left:0;right:0;height:18px;pointer-events:none;z-index:2}
 .dial-display::before{top:0;background:linear-gradient(to bottom,rgba(13,5,20,.85),transparent)}
 .dial-display::after{bottom:0;background:linear-gradient(to top,rgba(13,5,20,.85),transparent)}
 .dial-arrows{display:flex;gap:4px}
-.dial-btn{
-  width:clamp(22px, 5vw, 26px);height:clamp(22px, 5vw, 26px);border-radius:50%;
-  background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.25);
-  color:var(--pink2);font-size:0.75rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;
-}
+.dial-btn{width:clamp(22px, 5vw, 26px);height:clamp(22px, 5vw, 26px);border-radius:50%;background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.25);color:var(--pink2);font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .dial-btn:hover{background:rgba(255,107,157,.3);transform:scale(1.1)}
 .dial-label{font-size:clamp(0.55rem, 1.8vw, 0.65rem);letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 .lock-hint{font-size:clamp(0.8rem, 2.2vw, 0.9rem);color:#c0a8c8;background:rgba(255,107,157,.06);border-left:2px solid var(--pink);padding:clamp(0.6rem, 2vw, 0.8rem) clamp(0.8rem, 2vw, 1rem);border-radius:0 8px 8px 0;margin:.8rem 0;text-align:left;line-height:1.7}
@@ -156,34 +139,23 @@ em{color:var(--pink2)}
 .lock-shake{animation:lockShake .4s ease}
 @keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}60%{transform:translateX(12px)}80%{transform:translateX(-6px)}}
 
-/* WORD PUZZLE – flexible pieces */
-.puzzle-piece{
-  padding:clamp(0.3rem, 1.5vw, 0.4rem) clamp(0.7rem, 2vw, 0.85rem);
-  border-radius:50px;background:rgba(255,107,157,.12);
-  border:1px solid rgba(255,107,157,.3);
-  font-size:clamp(0.8rem, 2.2vw, 0.9rem);font-weight:600;color:var(--cream);
-  cursor:pointer;transition:all .2s;font-family:'Raleway',sans-serif;letter-spacing:1px;
-  white-space:nowrap;
-}
+/* WORD PUZZLE */
+.puzzle-piece{padding:clamp(0.3rem, 1.5vw, 0.4rem) clamp(0.7rem, 2vw, 0.85rem);border-radius:50px;background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.3);font-size:clamp(0.8rem, 2.2vw, 0.9rem);font-weight:600;color:var(--cream);cursor:pointer;transition:all .2s;font-family:'Raleway',sans-serif;letter-spacing:1px;white-space:nowrap;}
 .puzzle-piece:hover{background:rgba(255,107,157,.28);transform:scale(1.08)}
 .puzzle-piece.used{opacity:.22;pointer-events:none;background:rgba(255,107,157,.04)}
 
-/* FINAL LETTER – scrollable inside stage */
+/* FINAL LETTER */
 .letter-scroll{
   background:linear-gradient(160deg,rgba(25,10,35,.98),rgba(18,8,28,.99));
   border:1px solid rgba(245,200,66,.25);border-radius:16px;
   padding:clamp(1.2rem, 5vw, 2rem) clamp(1rem, 4vw, 1.8rem);
-  max-width:500px;width:100%;margin:auto auto 120px auto; /* space for fixed button */
+  max-width:500px;width:100%;margin:auto auto 120px auto;
   box-shadow:0 0 0 1px rgba(245,200,66,.05),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(245,200,66,.06);
   position:relative;overflow:hidden;
 }
 .letter-scroll::before,.letter-scroll::after{content:'';position:absolute;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .letter-scroll::before{top:0}.letter-scroll::after{bottom:0}
-.letter-text{
-  font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;
-  line-height:2;color:#d4c0e0;text-align:left;
-  border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;margin:1rem 0;
-}
+.letter-text{font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;line-height:2;color:#d4c0e0;text-align:left;border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;margin:1rem 0;}
 #final-card{opacity:0;transform:translateY(40px) scale(.95);transition:all 1s cubic-bezier(.34,1.56,.64,1)}
 #final-card.show{opacity:1;transform:none}
 
@@ -204,13 +176,8 @@ em{color:var(--pink2)}
 @keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.8) rotate(180deg);opacity:0}}
 @keyframes pulse-ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
 
-/* FIXED RESTART BUTTON – always visible */
-.fixed-restart-btn{
-  position:fixed;bottom:25px;left:50%;transform:translateX(-50%);
-  z-index:9999;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);
-  font-size:clamp(0.75rem, 2vw, 0.9rem);white-space:nowrap;
-  box-shadow:0 0 30px rgba(245,200,66,.5);
-}
+/* FIXED RESTART BUTTON */
+.fixed-restart-btn{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);z-index:9999;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);font-size:clamp(0.75rem, 2vw, 0.9rem);white-space:nowrap;box-shadow:0 0 30px rgba(245,200,66,.5);}
 </style>
 </head>
 <body>
@@ -223,7 +190,7 @@ em{color:var(--pink2)}
     <span style="font-size:clamp(4rem, 12vw, 5.5rem)">💌</span>
   </div>
   <div class="card">
-    <div class="dots-row"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="dots-row"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="small">a secret delivery for Emi</div>
     <h1>Something Arrived<br><em style="-webkit-text-fill-color:unset;font-style:italic;font-size:.65em;color:var(--pink2)">for you.</em></h1>
     <div class="fancy-divider"><span>💌</span></div>
@@ -239,7 +206,7 @@ em{color:var(--pink2)}
 <!-- ════════ STAGE 2 — THE EGG ════════ -->
 <div class="stage" id="s2">
   <div class="card" style="max-width:460px">
-    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="small">stage one · Emi's challenge</div>
     <h2>Break the Egg 🥚</h2>
     <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Something precious is hiding inside.<br>Tap it <strong style="color:var(--pink2)">30 times</strong> to set it free!</p>
@@ -283,10 +250,22 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 3 — THE VAULT ════════ -->
+<!-- ════════ NEW STAGE – PHOTO & "THIS IS ME AND YOU" ════════ -->
+<div class="stage" id="photo-stage">
+  <div class="card" style="max-width:460px">
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="small">a little memory</div>
+    <h2>This is me and you 💕</h2>
+    <img src="us.jpg" alt="Ermi & Emi" style="width:100%;max-width:280px;border-radius:16px;margin:1rem auto;display:block;box-shadow:0 8px 25px rgba(255,107,157,.2);">
+    <p style="margin-top:0.8rem">Every adventure, every quiet moment — it all begins with us.</p>
+    <button class="btn btn-gold" onclick="goTo('s3');buildDials()">Continue the Journey ✨</button>
+  </div>
+</div>
+
+<!-- ════════ STAGE 3 — THE VAULT (now 4th dot) ════════ -->
 <div class="stage" id="s3">
   <div class="card" style="max-width:480px">
-    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="small">stage two · the vault</div>
     <h2>🔐 The Love Vault</h2>
     <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Ermi locked something away. Solve the clues to open it.</p>
@@ -307,10 +286,10 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 4 — WORD PUZZLE ════════ -->
+<!-- ════════ STAGE 4 — WORD PUZZLE (now 5th dot) ════════ -->
 <div class="stage" id="s4">
   <div class="card" style="max-width:480px">
-    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
     <div class="small">stage three · complete the feeling</div>
     <h2>💝 What Did Ermi Want to Say?</h2>
     <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Tap the words <em>in the right order</em> to reveal his message.</p>
@@ -323,7 +302,7 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 5 — FINAL LETTER (scrollable + fixed button) ════════ -->
+<!-- ════════ STAGE 5 — FINAL LETTER (now 6th dot, no image) ════════ -->
 <div class="stage" id="s5" style="padding-bottom:140px;">
   <div class="letter-scroll" id="final-card">
     <div style="text-align:center;margin-bottom:1rem">
@@ -333,8 +312,6 @@ em{color:var(--pink2)}
     </div>
     <div class="fancy-divider"><span>💛</span></div>
     <div class="letter-text" id="letter-out"></div>
-    <!-- Photo of Ermi & Emi -->
-    <img src="us.jpg" alt="Ermi & Emi" style="width:100%;max-width:280px;border-radius:16px;margin:1rem auto;display:block;box-shadow:0 8px 25px rgba(255,107,157,.2);">
     <div class="fancy-divider"><span>🌹</span></div>
     <div style="text-align:center;margin-top:1rem">
       <div class="script" style="font-size:1.2rem;color:var(--pink2)">Forever yours, Ermi 💕</div>
@@ -453,58 +430,29 @@ let comboCount=0;
 function tapEgg(e){
   if(tapCount>=TOTAL_TAPS)return;
   tapCount++;
-
   const rect=document.getElementById('egg').getBoundingClientRect();
   const tx=e?e.clientX:rect.left+rect.width/2;
   const ty=e?e.clientY:rect.top+rect.height/2;
-
   const countEl=document.getElementById('egg-count');
   countEl.textContent=tapCount;
   countEl.classList.remove('pop');void countEl.offsetWidth;countEl.classList.add('pop');
-
   document.getElementById('ring-bar').style.strokeDashoffset=220*(1-tapCount/TOTAL_TAPS);
-
   const crackAt=[7,13,19,25,30];
-  if(crackAt.includes(tapCount) && cracksAdded < crackPaths.length){
-    addCrack(crackPaths[cracksAdded]);cracksAdded++;
-  }
-
+  if(crackAt.includes(tapCount) && cracksAdded < crackPaths.length){addCrack(crackPaths[cracksAdded]);cracksAdded++;}
   const prog=tapCount/TOTAL_TAPS;
   document.getElementById('egg-body').setAttribute('fill',`hsl(${340+prog*20},${70+prog*15}%,${90-prog*20}%)`);
   document.getElementById('egg').style.filter=`drop-shadow(0 0 ${20+prog*55}px rgba(255,107,157,${.3+prog*.55}))`;
-
-  tapBurstAt(tx-12,ty-20);
-  rippleAt(tx,ty);
-  sparkleAt(tx,ty,4);
-
-  if([10,20,25,29].includes(tapCount)){
-    document.body.style.background='rgba(255,107,157,.08)';
-    setTimeout(()=>document.body.style.background='',120);
-  }
-
-  if(tapCount%5===0){
-    comboCount++;
-    comboTextAt(tx-30,ty-30,comboWords[comboCount%comboWords.length]);
-    spawnHearts(3,tx,ty);
-  }
-
-  for(const [at,msg] of eggMessages){
-    if(tapCount===at){
-      const el=document.getElementById('egg-msg');
-      el.textContent=msg;el.classList.add('show');
-    }
-  }
-
+  tapBurstAt(tx-12,ty-20);rippleAt(tx,ty);sparkleAt(tx,ty,4);
+  if([10,20,25,29].includes(tapCount)){document.body.style.background='rgba(255,107,157,.08)';setTimeout(()=>document.body.style.background='',120);}
+  if(tapCount%5===0){comboCount++;comboTextAt(tx-30,ty-30,comboWords[comboCount%comboWords.length]);spawnHearts(3,tx,ty);}
+  for(const [at,msg] of eggMessages){if(tapCount===at){const el=document.getElementById('egg-msg');el.textContent=msg;el.classList.add('show');}}
   if(tapCount>=TOTAL_TAPS)eggComplete();
 }
 
 function addCrack(path){
   const g=document.getElementById('crack-group');
   const line=document.createElementNS('http://www.w3.org/2000/svg','path');
-  line.setAttribute('d',path);
-  line.setAttribute('stroke',`hsl(${340+cracksAdded*5},70%,50%)`);
-  line.setAttribute('stroke-width','2.5');line.setAttribute('fill','none');
-  line.setAttribute('stroke-linecap','round');
+  line.setAttribute('d',path);line.setAttribute('stroke',`hsl(${340+cracksAdded*5},70%,50%)`);line.setAttribute('stroke-width','2.5');line.setAttribute('fill','none');line.setAttribute('stroke-linecap','round');
   g.appendChild(line);
 }
 
@@ -519,62 +467,41 @@ function eggComplete(){
   egg.style.animation='eggShatter .9s ease forwards';
   spawnHearts(20,egg.getBoundingClientRect().left+egg.offsetWidth/2,egg.getBoundingClientRect().top+egg.offsetHeight/2);
   confettiBurst(50);
-  setTimeout(()=>{goTo('s3');buildDials()},1700);
+  // Now go to the new photo stage instead of the vault
+  setTimeout(()=>{goTo('photo-stage')},1700);
 }
 
 // ═══ STAGE 3 — VAULT ═══
 const LOCK_ANSWER=[4,1,4,9,2,0,1,8];
 let dialValues=new Array(8).fill(0);
-
 function buildDials(){
   dialValues=new Array(8).fill(0);
-  const wrap=document.getElementById('lock-dials');
-  wrap.innerHTML='';
+  const wrap=document.getElementById('lock-dials');wrap.innerHTML='';
   const groups = [[0], [1,2], [3], [4,5,6,7]];
   const groupLabels = ['LOVE', 'Day', 'Month', 'Year'];
   groups.forEach((indices, gi)=>{
-    const row = document.createElement('div');
-    row.className = 'dial-row';
-    const label = document.createElement('div');
-    label.className = 'dial-label';
-    label.textContent = groupLabels[gi];
-    label.style.marginRight = '0.5rem';
+    const row = document.createElement('div');row.className = 'dial-row';
+    const label = document.createElement('div');label.className = 'dial-label';label.textContent = groupLabels[gi];label.style.marginRight = '0.5rem';
     row.appendChild(label);
     indices.forEach((globalIdx)=>{
-      const dw = document.createElement('div');
-      dw.className = 'dial-wrap';
-      dw.innerHTML = `
-        <div class="dial-arrows">
-          <div class="dial-btn" onclick="changeDial(${globalIdx},1)">▲</div>
-          <div class="dial-btn" onclick="changeDial(${globalIdx},-1)">▼</div>
-        </div>
-        <div class="dial-display" id="dial-${globalIdx}">0</div>`;
+      const dw = document.createElement('div');dw.className = 'dial-wrap';
+      dw.innerHTML = `<div class="dial-arrows"><div class="dial-btn" onclick="changeDial(${globalIdx},1)">▲</div><div class="dial-btn" onclick="changeDial(${globalIdx},-1)">▼</div></div><div class="dial-display" id="dial-${globalIdx}">0</div>`;
       row.appendChild(dw);
     });
     wrap.appendChild(row);
   });
 }
 
-function changeDial(i,dir){
-  dialValues[i]=(dialValues[i]+dir+10)%10;
-  const el=document.getElementById('dial-'+i);
-  el.textContent=dialValues[i];
-  el.style.color='var(--gold2)';
-  setTimeout(()=>el.style.color='var(--cream)',280);
-  sparkleAt(el.getBoundingClientRect().left+24,el.getBoundingClientRect().top+32,3);
-}
+function changeDial(i,dir){dialValues[i]=(dialValues[i]+dir+10)%10;const el=document.getElementById('dial-'+i);el.textContent=dialValues[i];el.style.color='var(--gold2)';setTimeout(()=>el.style.color='var(--cream)',280);sparkleAt(el.getBoundingClientRect().left+24,el.getBoundingClientRect().top+32,3);}
 
 function checkLock(){
   const fb=document.getElementById('lock-feedback');
   if(JSON.stringify(dialValues)===JSON.stringify(LOCK_ANSWER)){
-    fb.textContent='🔓 Click! The vault opens... ✨';
-    fb.style.color='#6de08a';fb.classList.add('show');
-    spawnHearts(12,window.innerWidth/2,window.innerHeight/2);
-    confettiBurst(35);
+    fb.textContent='🔓 Click! The vault opens... ✨';fb.style.color='#6de08a';fb.classList.add('show');
+    spawnHearts(12,window.innerWidth/2,window.innerHeight/2);confettiBurst(35);
     setTimeout(()=>{goTo('s4');buildWordPuzzle()},1500);
   } else {
-    fb.textContent='❌ Not quite, Emi... check the hints again 💭';
-    fb.style.color='var(--pink)';fb.classList.add('show');
+    fb.textContent='❌ Not quite, Emi... check the hints again 💭';fb.style.color='var(--pink)';fb.classList.add('show');
     document.getElementById('lock-dials').classList.add('lock-shake');
     setTimeout(()=>document.getElementById('lock-dials').classList.remove('lock-shake'),500);
   }
@@ -583,66 +510,18 @@ function checkLock(){
 // ═══ STAGE 4 — WORD PUZZLE ═══
 const SENTENCE=["You","are","my","everything","Emi"];
 let selectedWords=[];
-
 function buildWordPuzzle(){
   selectedWords=[];
   document.getElementById('slots-row').innerHTML='<span style="color:var(--muted);font-size:clamp(0.78rem,2.2vw,0.85rem);font-style:italic">_ _ _ _ _</span>';
   const shuffled=[...SENTENCE].sort(()=>Math.random()-.5);
   const pw=document.getElementById('word-pieces');pw.innerHTML='';
-  shuffled.forEach((word,i)=>{
-    const btn=document.createElement('div');
-    btn.className='puzzle-piece';btn.id='wp-'+i;
-    btn.textContent=word;btn.onclick=()=>selectWord(word,btn);
-    pw.appendChild(btn);
-  });
-  document.getElementById('puzzle-feedback').textContent='';
-  document.getElementById('puzzle-feedback').classList.remove('show');
+  shuffled.forEach((word,i)=>{const btn=document.createElement('div');btn.className='puzzle-piece';btn.id='wp-'+i;btn.textContent=word;btn.onclick=()=>selectWord(word,btn);pw.appendChild(btn);});
+  document.getElementById('puzzle-feedback').textContent='';document.getElementById('puzzle-feedback').classList.remove('show');
 }
-
-function selectWord(word,btn){
-  if(btn.classList.contains('used'))return;
-  selectedWords.push(word);btn.classList.add('used');
-  sparkleAt(btn.getBoundingClientRect().left+btn.offsetWidth/2,btn.getBoundingClientRect().top+20,3);
-  renderSlots();
-  if(selectedWords.length===SENTENCE.length)checkSentence();
-}
-
-function renderSlots(){
-  const slots=document.getElementById('slots-row');slots.innerHTML='';
-  selectedWords.forEach(w=>{
-    const sp=document.createElement('div');
-    sp.style.cssText='background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.35);border-radius:50px;padding:.3rem .75rem;font-size:clamp(0.8rem,2.2vw,0.9rem);color:var(--cream);font-family:Raleway,sans-serif;cursor:pointer;margin:.15rem';
-    sp.textContent=w;sp.onclick=()=>removeWord(w);
-    slots.appendChild(sp);
-  });
-}
-
-function removeWord(word){
-  const idx=selectedWords.indexOf(word);
-  if(idx>-1)selectedWords.splice(idx,1);
-  document.querySelectorAll('.puzzle-piece').forEach(el=>{
-    if(el.textContent===word&&el.classList.contains('used')){el.classList.remove('used')}
-  });
-  renderSlots();document.getElementById('puzzle-feedback').textContent='';
-}
-
-function checkSentence(){
-  const fb=document.getElementById('puzzle-feedback');
-  if(JSON.stringify(selectedWords)===JSON.stringify(SENTENCE)){
-    fb.textContent='💖 Perfect. Every word, exactly right, Emi.';
-    fb.style.color='#6de08a';fb.classList.add('show');
-    confettiBurst(55);spawnHearts(22,window.innerWidth/2,window.innerHeight*.5);
-    setTimeout(()=>{goTo('s5');showFinalLetter()},1900);
-  } else {
-    fb.textContent='✨ Almost... the order isn\'t right. Try again!';
-    fb.style.color='var(--pink)';fb.classList.add('show');
-    setTimeout(()=>{
-      selectedWords=[];
-      document.querySelectorAll('.puzzle-piece').forEach(el=>el.classList.remove('used'));
-      renderSlots();fb.textContent='';fb.classList.remove('show');
-    },2000);
-  }
-}
+function selectWord(word,btn){if(btn.classList.contains('used'))return;selectedWords.push(word);btn.classList.add('used');sparkleAt(btn.getBoundingClientRect().left+btn.offsetWidth/2,btn.getBoundingClientRect().top+20,3);renderSlots();if(selectedWords.length===SENTENCE.length)checkSentence();}
+function renderSlots(){const slots=document.getElementById('slots-row');slots.innerHTML='';selectedWords.forEach(w=>{const sp=document.createElement('div');sp.style.cssText='background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.35);border-radius:50px;padding:.3rem .75rem;font-size:clamp(0.8rem,2.2vw,0.9rem);color:var(--cream);font-family:Raleway,sans-serif;cursor:pointer;margin:.15rem';sp.textContent=w;sp.onclick=()=>removeWord(w);slots.appendChild(sp);});}
+function removeWord(word){const idx=selectedWords.indexOf(word);if(idx>-1)selectedWords.splice(idx,1);document.querySelectorAll('.puzzle-piece').forEach(el=>{if(el.textContent===word&&el.classList.contains('used')){el.classList.remove('used')}});renderSlots();document.getElementById('puzzle-feedback').textContent='';}
+function checkSentence(){const fb=document.getElementById('puzzle-feedback');if(JSON.stringify(selectedWords)===JSON.stringify(SENTENCE)){fb.textContent='💖 Perfect. Every word, exactly right, Emi.';fb.style.color='#6de08a';fb.classList.add('show');confettiBurst(55);spawnHearts(22,window.innerWidth/2,window.innerHeight*.5);setTimeout(()=>{goTo('s5');showFinalLetter()},1900);} else {fb.textContent='✨ Almost... the order isn\'t right. Try again!';fb.style.color='var(--pink)';fb.classList.add('show');setTimeout(()=>{selectedWords=[];document.querySelectorAll('.puzzle-piece').forEach(el=>el.classList.remove('used'));renderSlots();fb.textContent='';fb.classList.remove('show');},2000);}}
 
 // ═══ STAGE 5 — FINAL LETTER ═══
 const LETTER=`💝 Emiyee 💖
@@ -659,31 +538,18 @@ function showFinalLetter(){
     document.getElementById('final-card').classList.add('show');
     typewriterLetter(document.getElementById('letter-out'),LETTER,16);
     confettiBurst(90);
-    for(let i=0;i<14;i++){setTimeout(()=>{
-      const el=document.createElement('div');el.className='star-burst';
-      el.textContent=['✨','⭐','💫','🌟','🎀'][Math.floor(Math.random()*5)];
-      el.style.left=Math.random()*80+10+'vw';el.style.top=Math.random()*80+10+'vh';
-      document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
-    },i*250)}
+    for(let i=0;i<14;i++){setTimeout(()=>{const el=document.createElement('div');el.className='star-burst';el.textContent=['✨','⭐','💫','🌟','🎀'][Math.floor(Math.random()*5)];el.style.left=Math.random()*80+10+'vw';el.style.top=Math.random()*80+10+'vh';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);},i*250)}
     spawnHearts(30,window.innerWidth/2,window.innerHeight);
   },500);
 }
-
-function typewriterLetter(el,text,speed){
-  el.innerHTML='';let i=0;
-  const iv=setInterval(()=>{
-    el.innerHTML=text.slice(0,i).replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
-    i++;if(i>text.length)clearInterval(iv);
-  },speed);
-}
+function typewriterLetter(el,text,speed){el.innerHTML='';let i=0;const iv=setInterval(()=>{el.innerHTML=text.slice(0,i).replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');i++;if(i>text.length)clearInterval(iv);},speed);}
 
 // ═══ RESTART ═══
 function restartAll(){
   tapCount=0;cracksAdded=0;comboCount=0;selectedWords=[];
   document.getElementById('egg-count').textContent='0';
   document.getElementById('ring-bar').style.strokeDashoffset='220';
-  document.getElementById('egg').style.filter='';
-  document.getElementById('egg').style.animation='';
+  document.getElementById('egg').style.filter='';document.getElementById('egg').style.animation='';
   document.getElementById('egg-body').setAttribute('fill','url(#eggGrad)');
   document.getElementById('crack-group').innerHTML='';
   document.getElementById('tap-hint').style.display='';
