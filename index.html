@@ -144,18 +144,33 @@ em{color:var(--pink2)}
 .puzzle-piece:hover{background:rgba(255,107,157,.28);transform:scale(1.08)}
 .puzzle-piece.used{opacity:.22;pointer-events:none;background:rgba(255,107,157,.04)}
 
-/* FINAL LETTER */
+/* FINAL LETTER – BIG & FULL HEIGHT */
+#s5.stage{
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:clamp(1rem, 4vw, 1.5rem);
+  padding-bottom:calc(80px + env(safe-area-inset-bottom, 0px)); /* clear the fixed button */
+}
 .letter-scroll{
   background:linear-gradient(160deg,rgba(25,10,35,.98),rgba(18,8,28,.99));
   border:1px solid rgba(245,200,66,.25);border-radius:16px;
   padding:clamp(1.2rem, 5vw, 2rem) clamp(1rem, 4vw, 1.8rem);
-  max-width:500px;width:100%;margin:auto auto 120px auto;
+  max-width:500px;width:100%;
+  flex:1 1 auto;                  /* fills available vertical space */
+  margin:0 auto;
   box-shadow:0 0 0 1px rgba(245,200,66,.05),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(245,200,66,.06);
   position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
 }
 .letter-scroll::before,.letter-scroll::after{content:'';position:absolute;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .letter-scroll::before{top:0}.letter-scroll::after{bottom:0}
-.letter-text{font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;line-height:2;color:#d4c0e0;text-align:left;border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;margin:1rem 0;}
+.letter-text{
+  font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;
+  line-height:2;color:#d4c0e0;text-align:left;
+  border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;
+  margin:1rem 0;
+  flex:1 1 auto;                 /* allow text to take up space */
+  overflow-y:auto;               /* in case it ever overflows */
+}
 #final-card{opacity:0;transform:translateY(40px) scale(.95);transition:all 1s cubic-bezier(.34,1.56,.64,1)}
 #final-card.show{opacity:1;transform:none}
 
@@ -176,8 +191,18 @@ em{color:var(--pink2)}
 @keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.8) rotate(180deg);opacity:0}}
 @keyframes pulse-ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
 
-/* FIXED RESTART BUTTON */
-.fixed-restart-btn{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);z-index:9999;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);font-size:clamp(0.75rem, 2vw, 0.9rem);white-space:nowrap;box-shadow:0 0 30px rgba(245,200,66,.5);}
+/* FIXED RESTART BUTTON – right at the bottom */
+.fixed-restart-btn{
+  position:fixed;
+  bottom:calc(15px + env(safe-area-inset-bottom, 0px));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+  padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);
+  font-size:clamp(0.75rem, 2vw, 0.9rem);
+  white-space:nowrap;
+  box-shadow:0 0 30px rgba(245,200,66,.5);
+}
 </style>
 </head>
 <body>
@@ -250,7 +275,7 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ NEW STAGE – PHOTO & "THIS IS ME AND YOU" ════════ -->
+<!-- ════════ PHOTO STAGE – "THIS IS ME AND YOU" ════════ -->
 <div class="stage" id="photo-stage">
   <div class="card" style="max-width:460px">
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
@@ -262,7 +287,7 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 3 — THE VAULT (now 4th dot) ════════ -->
+<!-- ════════ STAGE 3 — THE VAULT ════════ -->
 <div class="stage" id="s3">
   <div class="card" style="max-width:480px">
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
@@ -286,7 +311,7 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 4 — WORD PUZZLE (now 5th dot) ════════ -->
+<!-- ════════ STAGE 4 — WORD PUZZLE ════════ -->
 <div class="stage" id="s4">
   <div class="card" style="max-width:480px">
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
@@ -302,8 +327,8 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 5 — FINAL LETTER (now 6th dot, no image) ════════ -->
-<div class="stage" id="s5" style="padding-bottom:140px;">
+<!-- ════════ STAGE 5 — FINAL LETTER (big box, full text, fixed button) ════════ -->
+<div class="stage" id="s5">
   <div class="letter-scroll" id="final-card">
     <div style="text-align:center;margin-bottom:1rem">
       <div class="small">the surprise is yours, Emi</div>
@@ -317,7 +342,7 @@ em{color:var(--pink2)}
       <div class="script" style="font-size:1.2rem;color:var(--pink2)">Forever yours, Ermi 💕</div>
     </div>
   </div>
-  <!-- Fixed Restart Button -->
+  <!-- Fixed Restart Button – always at the bottom -->
   <button class="btn-gold btn fixed-restart-btn" onclick="restartAll()">✨ Read Again ✨</button>
 </div>
 
@@ -467,7 +492,6 @@ function eggComplete(){
   egg.style.animation='eggShatter .9s ease forwards';
   spawnHearts(20,egg.getBoundingClientRect().left+egg.offsetWidth/2,egg.getBoundingClientRect().top+egg.offsetHeight/2);
   confettiBurst(50);
-  // Now go to the new photo stage instead of the vault
   setTimeout(()=>{goTo('photo-stage')},1700);
 }
 
