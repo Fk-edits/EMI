@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Something is Waiting for You, Emi...</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Raleway:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08050f;--deep:#0f0a1a;--card:#130d20;
+  --pink:#ff6b9d;--pink2:#ff9abf;--rose:#c0392b;
+  --gold:#f5c842;--gold2:#ffe680;--lavender:#b39ddb;
+  --cream:#fff5f8;--muted:#7a6080;--white:#fff;
+}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:'Raleway',sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 80%,rgba(192,57,43,.13) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 20%,rgba(255,107,157,.10) 0%,transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 110%,rgba(179,157,219,.08) 0%,transparent 70%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* STAGES */
+.stage{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;width:100vw;padding:1.2rem;
+  position:fixed;inset:0;z-index:10;text-align:center;
+  overflow-y:auto;
+}
+.stage.active{display:flex}
+.stage.in{animation:stageIn .9s cubic-bezier(.22,1,.36,1) both}
+.stage.out{animation:stageOut .6s ease-in both}
+@keyframes stageIn{from{opacity:0;transform:scale(.93) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes stageOut{from{opacity:1}to{opacity:0;transform:scale(1.04)}}
+
+/* CARD */
+.card{
+  background:linear-gradient(145deg,rgba(25,15,40,.97),rgba(15,10,28,.99));
+  border:1px solid rgba(255,107,157,.2);border-radius:20px;
+  padding:2rem 1.8rem;max-width:500px;width:100%;
+  box-shadow:0 0 0 1px rgba(255,107,157,.05),0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(255,107,157,.06),inset 0 1px 0 rgba(255,107,157,.15);
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+}
+
+/* TYPOGRAPHY */
+h1{
+  font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);
+  font-weight:900;line-height:1.1;
+  background:linear-gradient(135deg,var(--pink2),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;
+}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:700;color:var(--pink2);margin-bottom:.7rem}
+.script{font-family:'Dancing Script',cursive;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold2);line-height:1.3}
+p{font-size:.92rem;line-height:1.85;color:#c0a8c8;margin:.5rem 0}
+.small{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.tagline{font-size:1rem;font-style:italic;color:#d4b0d4;margin:.5rem 0}
+em{color:var(--pink2)}
+
+/* HEARTS */
+.heart-float{position:fixed;pointer-events:none;z-index:9999;animation:heartRise linear forwards}
+@keyframes heartRise{0%{transform:translateY(0) scale(1) rotate(var(--r));opacity:1}100%{transform:translateY(-110vh) scale(.3) rotate(var(--r2));opacity:0}}
+
+/* TAP BURST */
+.tap-burst{
+  position:fixed;pointer-events:none;z-index:9999;
+  font-size:1.6rem;font-weight:bold;
+  animation:tapPop .7s cubic-bezier(.22,1,.36,1) forwards;
+  transform-origin:center;
+}
+@keyframes tapPop{
+  0%{transform:scale(0) translateY(0);opacity:1}
+  40%{transform:scale(1.4) translateY(-20px);opacity:1}
+  100%{transform:scale(.6) translateY(-60px);opacity:0}
+}
+
+/* RIPPLE */
+.ripple-ring{
+  position:fixed;pointer-events:none;z-index:9998;
+  border-radius:50%;border:3px solid var(--pink);
+  animation:rippleOut .6s ease-out forwards;
+}
+@keyframes rippleOut{0%{width:20px;height:20px;opacity:.9;margin-left:-10px;margin-top:-10px}100%{width:120px;height:120px;opacity:0;margin-left:-60px;margin-top:-60px}}
+
+/* SPARKLE */
+.sparkle{position:fixed;pointer-events:none;z-index:9998;width:6px;height:6px;border-radius:50%;animation:sparkleOut .8s ease-out forwards}
+@keyframes sparkleOut{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+
+/* COMBO TEXT */
+.combo-text{
+  position:fixed;pointer-events:none;z-index:9999;
+  font-family:'Dancing Script',cursive;font-size:1.4rem;font-weight:700;
+  color:var(--gold2);text-shadow:0 0 10px rgba(255,230,128,.6);
+  animation:comboRise .9s ease-out forwards;
+}
+@keyframes comboRise{0%{transform:translateY(0) scale(0.5);opacity:1}60%{transform:translateY(-40px) scale(1.1);opacity:1}100%{transform:translateY(-80px) scale(.8);opacity:0}}
+
+/* BUTTONS */
+.btn{
+  display:inline-block;margin:.4rem;padding:.75rem 1.8rem;
+  font-family:'Raleway',sans-serif;font-size:.8rem;font-weight:600;
+  letter-spacing:2.5px;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--pink),var(--rose));
+  color:#fff;border:none;border-radius:50px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(255,107,157,.35);
+  transition:all .25s ease;position:relative;overflow:hidden;
+}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);border-radius:50px}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 30px rgba(255,107,157,.5)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#e0a800);color:#1a0a00;box-shadow:0 4px 20px rgba(245,200,66,.35)}
+.btn-gold:hover{box-shadow:0 8px 30px rgba(245,200,66,.55)}
+
+/* EGG */
+.egg-container{
+  position:relative;width:180px;height:216px;margin:.6rem auto;
+  cursor:pointer;filter:drop-shadow(0 0 30px rgba(255,107,157,.3));
+  transition:filter .2s;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation; /* mobile fix */
+}
+.egg-container:active{transform:scale(.94)}
+.egg-counter{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--pink2);line-height:1}
+.egg-counter.pop{animation:popNum .18s ease both}
+@keyframes popNum{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.progress-ring-wrap{position:relative;width:80px;height:80px;margin:0 auto .6rem}
+.progress-ring-bg{fill:none;stroke:rgba(255,107,157,.1);stroke-width:5}
+.progress-ring-bar{fill:none;stroke:url(#ringGrad);stroke-width:5;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .25s ease}
+.egg-msg{min-height:1.3rem;font-size:.83rem;font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
+.egg-msg.show{opacity:1}
+.egg-tap-hint{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:.4rem;animation:blink2 1.5s ease-in-out infinite}
+@keyframes blink2{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* LOCK DIALS */
+.lock-dials{
+  display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1rem 0;
+}
+.dial-row{
+  display:flex;gap:.5rem;justify-content:center;align-items:center;
+}
+.dial-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+}
+.dial-display{
+  width:48px;height:64px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,107,157,.25);border-radius:10px;
+  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;overflow:hidden;transition:all .2s;
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.4);user-select:none;
+  touch-action:manipulation;
+}
+.dial-display:hover{border-color:var(--pink);box-shadow:0 0 20px rgba(255,107,157,.2),inset 0 2px 10px rgba(0,0,0,.4)}
+.dial-display::before,.dial-display::after{content:'';position:absolute;left:0;right:0;height:18px;pointer-events:none;z-index:2}
+.dial-display::before{top:0;background:linear-gradient(to bottom,rgba(13,5,20,.85),transparent)}
+.dial-display::after{bottom:0;background:linear-gradient(to top,rgba(13,5,20,.85),transparent)}
+.dial-arrows{display:flex;gap:4px}
+.dial-btn{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.25);
+  color:var(--pink2);font-size:.75rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.dial-btn:hover{background:rgba(255,107,157,.3);transform:scale(1.1)}
+.dial-label{font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.lock-hint{
+  font-size:.85rem;color:#c0a8c8;
+  background:rgba(255,107,157,.06);border-left:2px solid var(--pink);
+  padding:.7rem 1rem;border-radius:0 8px 8px 0;margin:.8rem 0;text-align:left;line-height:1.7;
+}
+.lock-hint ol{padding-left:1.2rem;margin-top:.4rem}
+.lock-hint li{margin:.25rem 0;font-size:.82rem}
+.lock-shake{animation:lockShake .4s ease}
+@keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}60%{transform:translateX(12px)}80%{transform:translateX(-6px)}}
+
+/* WORD PUZZLE */
+.puzzle-piece{
+  padding:.4rem .85rem;border-radius:50px;
+  background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.3);
+  font-size:.85rem;font-weight:600;color:var(--cream);cursor:pointer;
+  transition:all .2s;font-family:'Raleway',sans-serif;letter-spacing:1px;
+}
+.puzzle-piece:hover{background:rgba(255,107,157,.28);transform:scale(1.08)}
+.puzzle-piece.used{opacity:.22;pointer-events:none;background:rgba(255,107,157,.04)}
+
+/* FINAL LETTER */
+.letter-scroll{
+  background:linear-gradient(160deg,rgba(25,10,35,.98),rgba(18,8,28,.99));
+  border:1px solid rgba(245,200,66,.25);border-radius:16px;
+  padding:2rem 1.8rem;max-width:500px;width:100%;
+  box-shadow:0 0 0 1px rgba(245,200,66,.05),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(245,200,66,.06);
+  position:relative;overflow:hidden;margin:auto;
+  margin-bottom:100px; /* space for fixed button */
+}
+.letter-scroll::before,.letter-scroll::after{content:'';position:absolute;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.letter-scroll::before{top:0}.letter-scroll::after{bottom:0}
+.letter-text{
+  font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;
+  line-height:2;color:#d4c0e0;text-align:left;
+  border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;margin:1rem 0;
+}
+#final-card{opacity:0;transform:translateY(40px) scale(.95);transition:all 1s cubic-bezier(.34,1.56,.64,1)}
+#final-card.show{opacity:1;transform:none}
+
+/* MISC */
+.fancy-divider{display:flex;align-items:center;gap:.7rem;margin:1rem 0;opacity:.5}
+.fancy-divider::before,.fancy-divider::after{content:'';flex:1;height:1px}
+.fancy-divider::before{background:linear-gradient(90deg,transparent,var(--pink))}
+.fancy-divider::after{background:linear-gradient(90deg,var(--pink),transparent)}
+.fancy-divider span{font-size:1rem;color:var(--pink)}
+.dots-row{display:flex;gap:8px;justify-content:center;margin-bottom:1.2rem}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,107,157,.15);border:1px solid rgba(255,107,157,.2);transition:all .5s ease}
+.dot.done{background:var(--pink);box-shadow:0 0 8px var(--pink);transform:scale(1.3)}
+.egg-msg-feedback{min-height:1.2rem;font-size:.82rem;font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
+.egg-msg-feedback.show{opacity:1}
+.confetti-piece{position:fixed;top:-20px;border-radius:3px;animation:confettiFall linear forwards;z-index:9999;pointer-events:none}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.star-burst{position:fixed;pointer-events:none;z-index:9997;font-size:1.5rem;animation:starBurst .9s ease-out forwards}
+@keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.8) rotate(180deg);opacity:0}}
+@keyframes pulse-ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
+
+/* FIXED RESTART BUTTON */
+.fixed-restart-btn{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+  padding:.75rem 2rem;
+  font-size:.85rem;
+  white-space:nowrap;
+  box-shadow:0 0 30px rgba(245,200,66,.5);
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<!-- ════════ STAGE 1 — INTRO ════════ -->
+<div class="stage active in" id="s1">
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;width:150px;height:150px;margin:0 auto 1.5rem">
+    <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,107,157,.25);animation:pulse-ring 2s ease infinite"></div>
+    <span style="font-size:5.5rem">💌</span>
+  </div>
+  <div class="card">
+    <div class="dots-row"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="small">a secret delivery for Emi</div>
+    <h1>Something Arrived<br><em style="-webkit-text-fill-color:unset;font-style:italic;font-size:.65em;color:var(--pink2)">for you.</em></h1>
+    <div class="fancy-divider"><span>💌</span></div>
+    <p class="tagline">Ermi left something hidden inside.<br>You'll have to earn it. 💕</p>
+    <p style="font-size:.86rem">You'll need to <em>crack it open</em>, <em style="color:var(--gold2)">decode it</em>,<br>and <em style="color:var(--lavender)">piece it together</em>...</p>
+    <p style="font-size:.73rem;margin-top:.7rem;color:var(--muted)">Are you brave enough, Emi? 😉</p>
+    <div style="margin-top:1.4rem">
+      <button class="btn" onclick="startJourney()">Open the Letter ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ STAGE 2 — THE EGG ════════ -->
+<div class="stage" id="s2">
+  <div class="card" style="max-width:460px">
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="small">stage one · Emi's challenge</div>
+    <h2>Break the Egg 🥚</h2>
+    <p style="font-size:.86rem">Something precious is hiding inside.<br>Tap it <strong style="color:var(--pink2)">30 times</strong> to set it free!</p>
+    <div class="progress-ring-wrap" style="margin-top:.8rem">
+      <svg width="80" height="80" viewBox="0 0 80 80">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff6b9d"/>
+            <stop offset="100%" style="stop-color:#f5c842"/>
+          </linearGradient>
+        </defs>
+        <circle class="progress-ring-bg" cx="40" cy="40" r="35"/>
+        <circle class="progress-ring-bar" id="ring-bar" cx="40" cy="40" r="35"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div class="egg-counter" id="egg-count">0</div>
+        <div style="font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase">/ 30</div>
+      </div>
+    </div>
+    <div class="egg-container" id="egg" onpointerdown="tapEgg(event); event.preventDefault()">
+      <svg id="egg-svg" style="width:100%;height:100%" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="eggGrad" cx="38%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#fff5f8"/>
+            <stop offset="40%" stop-color="#f8e0e8"/>
+            <stop offset="100%" stop-color="#d4a0b0"/>
+          </radialGradient>
+          <radialGradient id="eggShine" cx="30%" cy="28%" r="30%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.8)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="100" cy="135" rx="75" ry="95" fill="rgba(255,107,157,0.1)"/>
+        <path id="egg-body" d="M100,15 C130,15 160,55 165,100 C170,145 148,225 100,225 C52,225 30,145 35,100 C40,55 70,15 100,15 Z" fill="url(#eggGrad)"/>
+        <ellipse cx="78" cy="75" rx="20" ry="30" fill="url(#eggShine)" opacity="0.6"/>
+        <g id="crack-group"></g>
+      </svg>
+    </div>
+    <p class="egg-msg" id="egg-msg">Keep going... 💕</p>
+    <div class="egg-tap-hint" id="tap-hint">TAP THE EGG</div>
+  </div>
+</div>
+
+<!-- ════════ STAGE 3 — THE VAULT ════════ -->
+<div class="stage" id="s3">
+  <div class="card" style="max-width:480px">
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="small">stage two · the vault</div>
+    <h2>🔐 The Love Vault</h2>
+    <p style="font-size:.86rem">Ermi locked something away. Solve the clues to open it.</p>
+    <div class="lock-hint">
+      <strong style="color:var(--pink2);font-size:.82rem;letter-spacing:1px">YOUR 6-DIGIT CODE:</strong>
+      <ol>
+        <li>Letters in the word <strong style="color:var(--pink2)">LOVE</strong> = <em style="color:var(--gold2)">?</em></li>
+        <li>Your birthday date = <em style="color:var(--gold2)">? ?</em> <span style="color:var(--muted);font-size:.75rem">(two digits)</span></li>
+        <li>Your birth month = <em style="color:var(--gold2)">?</em></li>
+        <li>This year = <em style="color:var(--gold2)">? ? ? ?</em> <span style="color:var(--muted);font-size:.75rem">(four digits)</span></li>
+      </ol>
+    </div>
+    <div class="lock-dials" id="lock-dials"></div>
+    <p class="egg-msg-feedback" id="lock-feedback"></p>
+    <div style="margin-top:.8rem">
+      <button class="btn" onclick="checkLock()">Unlock 🔓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ STAGE 4 — WORD PUZZLE ════════ -->
+<div class="stage" id="s4">
+  <div class="card" style="max-width:480px">
+    <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
+    <div class="small">stage three · complete the feeling</div>
+    <h2>💝 What Did Ermi Want to Say?</h2>
+    <p style="font-size:.86rem">Tap the words <em>in the right order</em> to reveal his message.</p>
+    <p style="font-size:.8rem;color:var(--gold2);font-style:italic;margin:.3rem 0;">✨ Hint: Ermi’s daily truth 🌟</p>
+    <div class="fancy-divider"><span>✨</span></div>
+    <div id="slots-row" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:.8rem 0;min-height:50px;align-items:center"></div>
+    <div style="font-size:.68rem;letter-spacing:2px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase">Tap words in the correct order ↓</div>
+    <div id="word-pieces" style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:.6rem 0"></div>
+    <p class="egg-msg-feedback" id="puzzle-feedback"></p>
+  </div>
+</div>
+
+<!-- ════════ STAGE 5 — FINAL LETTER (scrollable + fixed button) ════════ -->
+<div class="stage" id="s5" style="justify-content:flex-start;padding-top:2rem;padding-bottom:120px;">
+  <div class="letter-scroll" id="final-card">
+    <div style="text-align:center;margin-bottom:1rem">
+      <div class="small">the surprise is yours, Emi</div>
+      <div style="font-size:2.2rem;margin:.4rem 0">🌹</div>
+      <div class="script">Happy Birthday,<br>my love.</div>
+    </div>
+    <div class="fancy-divider"><span>💛</span></div>
+    <div class="letter-text" id="letter-out"></div>
+    <!-- Photo of Ermi & Emi -->
+    <img src="us.jpg" alt="Ermi & Emi" style="width:100%;max-width:280px;border-radius:16px;margin:1rem auto;display:block;box-shadow:0 8px 25px rgba(255,107,157,.2);">
+    <div class="fancy-divider"><span>🌹</span></div>
+    <div style="text-align:center;margin-top:1rem">
+      <div class="script" style="font-size:1.2rem;color:var(--pink2)">Forever yours, Ermi 💕</div>
+    </div>
+  </div>
+  <!-- Fixed Restart Button -->
+  <button class="btn-gold btn fixed-restart-btn" onclick="restartAll()">✨ Read Again ✨</button>
+</div>
+
+<script>
+// ═══ BG CANVAS ═══
+const bgCanvas=document.getElementById('bg-canvas');
+const bgCtx=bgCanvas.getContext('2d');
+let bW,bH,particles=[];
+function resizeBg(){bW=bgCanvas.width=window.innerWidth;bH=bgCanvas.height=window.innerHeight;initP()}
+function initP(){particles=Array.from({length:55},()=>({x:Math.random()*bW,y:Math.random()*bH,vx:(Math.random()-.5)*.3,vy:-Math.random()*.5-.1,r:Math.random()*2+.5,a:Math.random(),da:Math.random()*.01+.003,col:Math.random()>.5?'255,107,157':'245,200,66'}))}
+resizeBg();window.addEventListener('resize',resizeBg);
+function drawBg(){bgCtx.clearRect(0,0,bW,bH);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.da;if(p.a>1||p.a<0)p.da*=-1;if(p.y<-10)p.y=bH+10;if(p.x<-10)p.x=bW+10;if(p.x>bW+10)p.x=-10;bgCtx.beginPath();bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);bgCtx.fillStyle=`rgba(${p.col},${p.a*.6})`;bgCtx.fill()});requestAnimationFrame(drawBg)}
+drawBg();
+
+// ═══ NAVIGATION ═══
+function goTo(id){
+  document.querySelectorAll('.stage').forEach(s=>{
+    if(s.classList.contains('active')){s.classList.remove('in');s.classList.add('out');setTimeout(()=>{s.classList.remove('active','out')},550)}
+  });
+  setTimeout(()=>{const el=document.getElementById(id);el.classList.add('active','in')},500);
+}
+
+// ═══ FX ═══
+function spawnHearts(n,x,y){
+  const ems=['💕','💗','💖','💓','🌹','✨','💝','🎀'];
+  for(let i=0;i<n;i++){setTimeout(()=>{
+    const el=document.createElement('div');el.className='heart-float';
+    el.textContent=ems[Math.floor(Math.random()*ems.length)];
+    el.style.left=(x||Math.random()*window.innerWidth)+'px';
+    el.style.top=(y||window.innerHeight*.8)+'px';
+    el.style.fontSize=(.8+Math.random()*.9)+'rem';
+    el.style.setProperty('--r',(Math.random()*30-15)+'deg');
+    el.style.setProperty('--r2',(Math.random()*60-30)+'deg');
+    el.style.animationDuration=(2+Math.random()*3)+'s';
+    document.body.appendChild(el);setTimeout(()=>el.remove(),5000);
+  },i*110)}
+}
+
+function sparkleAt(x,y,n=8){
+  const cols=['#ff6b9d','#f5c842','#b39ddb','#ff9abf','#fff','#ffd700'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');el.className='sparkle';
+    el.style.left=x+'px';el.style.top=y+'px';
+    const ang=Math.random()*Math.PI*2,dist=40+Math.random()*70;
+    el.style.setProperty('--dx',Math.cos(ang)*dist+'px');
+    el.style.setProperty('--dy',Math.sin(ang)*dist+'px');
+    el.style.background=cols[Math.floor(Math.random()*cols.length)];
+    el.style.animationDuration=(.4+Math.random()*.6)+'s';
+    document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+  }
+}
+
+function tapBurstAt(x,y){
+  const ems=['💕','✨','💖','⭐','🌟','💗','💫','🎀','🌹'];
+  const el=document.createElement('div');el.className='tap-burst';
+  el.textContent=ems[Math.floor(Math.random()*ems.length)];
+  el.style.left=x+'px';el.style.top=y+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),800);
+}
+
+function rippleAt(x,y){
+  const el=document.createElement('div');el.className='ripple-ring';
+  el.style.left=x+'px';el.style.top=y+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),700);
+}
+
+function comboTextAt(x,y,text){
+  const el=document.createElement('div');el.className='combo-text';
+  el.textContent=text;el.style.left=x+'px';el.style.top=y+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+}
+
+function confettiBurst(n=80){
+  const cols=['#ff6b9d','#f5c842','#b39ddb','#ff9abf','#6de08a','#fff','#c0392b','#ffd700'];
+  for(let i=0;i<n;i++){setTimeout(()=>{
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.width=(5+Math.random()*9)+'px';el.style.height=(5+Math.random()*9)+'px';
+    el.style.background=cols[Math.floor(Math.random()*cols.length)];
+    el.style.borderRadius=Math.random()>.5?'50%':'0';
+    el.style.animationDuration=(2.5+Math.random()*3)+'s';
+    el.style.animationDelay=Math.random()+'s';
+    document.body.appendChild(el);setTimeout(()=>el.remove(),6000);
+  },i*25)}
+}
+
+// ═══ STAGE 1 ═══
+function startJourney(){spawnHearts(6,window.innerWidth/2,window.innerHeight*.7);goTo('s2')}
+
+// ═══ STAGE 2 — EGG (30 taps) ═══
+let tapCount=0;
+const TOTAL_TAPS=30;
+const eggMessages=[
+  [5,"Mmm, something's stirring inside... 🥚"],
+  [10,"Emi... it's warming up! 💗"],
+  [15,"Halfway! Don't stop, Emi! 💕"],
+  [20,"The shell is cracking... 🌹"],
+  [25,"So close!! Just a little more! 💖"],
+  [29,"ONE MORE TAP!!!! 🔥"],
+];
+const crackPaths=[
+  "M100,15 L94,55 L107,82","M100,15 L110,52 L97,88",
+  "M68,78 L88,94 L72,132","M132,68 L114,93 L127,133",
+  "M83,138 L100,162 L88,202","M100,162 L116,183 L104,222",
+];
+let cracksAdded=0;
+const comboWords=['Sweet!','Loving it!','Keep going!','Yes Emi!','Almost!','So close!','You got this!'];
+let comboCount=0;
+
+function tapEgg(e){
+  if(tapCount>=TOTAL_TAPS)return;
+  tapCount++;
+
+  const rect=document.getElementById('egg').getBoundingClientRect();
+  const tx=e?e.clientX:rect.left+rect.width/2;
+  const ty=e?e.clientY:rect.top+rect.height/2;
+
+  const countEl=document.getElementById('egg-count');
+  countEl.textContent=tapCount;
+  countEl.classList.remove('pop');void countEl.offsetWidth;countEl.classList.add('pop');
+
+  document.getElementById('ring-bar').style.strokeDashoffset=220*(1-tapCount/TOTAL_TAPS);
+
+  const crackAt=[7,13,19,25,30];
+  if(crackAt.includes(tapCount) && cracksAdded < crackPaths.length){
+    addCrack(crackPaths[cracksAdded]);cracksAdded++;
+  }
+
+  const prog=tapCount/TOTAL_TAPS;
+  document.getElementById('egg-body').setAttribute('fill',`hsl(${340+prog*20},${70+prog*15}%,${90-prog*20}%)`);
+  document.getElementById('egg').style.filter=`drop-shadow(0 0 ${20+prog*55}px rgba(255,107,157,${.3+prog*.55}))`;
+
+  tapBurstAt(tx-12,ty-20);
+  rippleAt(tx,ty);
+  sparkleAt(tx,ty,4);
+
+  if([10,20,25,29].includes(tapCount)){
+    document.body.style.background='rgba(255,107,157,.08)';
+    setTimeout(()=>document.body.style.background='',120);
+  }
+
+  if(tapCount%5===0){
+    comboCount++;
+    comboTextAt(tx-30,ty-30,comboWords[comboCount%comboWords.length]);
+    spawnHearts(3,tx,ty);
+  }
+
+  for(const [at,msg] of eggMessages){
+    if(tapCount===at){
+      const el=document.getElementById('egg-msg');
+      el.textContent=msg;el.classList.add('show');
+    }
+  }
+
+  if(tapCount>=TOTAL_TAPS)eggComplete();
+}
+
+function addCrack(path){
+  const g=document.getElementById('crack-group');
+  const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+  line.setAttribute('d',path);
+  line.setAttribute('stroke',`hsl(${340+cracksAdded*5},70%,50%)`);
+  line.setAttribute('stroke-width','2.5');line.setAttribute('fill','none');
+  line.setAttribute('stroke-linecap','round');
+  g.appendChild(line);
+}
+
+function eggComplete(){
+  document.getElementById('tap-hint').style.display='none';
+  document.getElementById('egg-msg').textContent='💥 The egg hatched, Emi! 💖';
+  document.getElementById('egg-msg').classList.add('show');
+  const egg=document.getElementById('egg');
+  const style=document.createElement('style');
+  style.textContent='@keyframes eggShatter{0%{transform:scale(1)}25%{transform:scale(1.2) rotate(-6deg)}55%{transform:scale(.85) rotate(6deg)}80%{transform:scale(1.35);opacity:.5}100%{transform:scale(0);opacity:0}}';
+  document.head.appendChild(style);
+  egg.style.animation='eggShatter .9s ease forwards';
+  spawnHearts(20,egg.getBoundingClientRect().left+egg.offsetWidth/2,egg.getBoundingClientRect().top+egg.offsetHeight/2);
+  confettiBurst(50);
+  setTimeout(()=>{goTo('s3');buildDials()},1700);
+}
+
+// ═══ STAGE 3 — VAULT ═══
+const LOCK_ANSWER=[4,1,4,9,2,0,1,8];
+let dialValues=new Array(8).fill(0);
+
+function buildDials(){
+  dialValues=new Array(8).fill(0);
+  const wrap=document.getElementById('lock-dials');
+  wrap.innerHTML='';
+  const groups = [[0], [1,2], [3], [4,5,6,7]];
+  const groupLabels = ['LOVE', 'Day', 'Month', 'Year'];
+  groups.forEach((indices, gi)=>{
+    const row = document.createElement('div');
+    row.className = 'dial-row';
+    const label = document.createElement('div');
+    label.className = 'dial-label';
+    label.textContent = groupLabels[gi];
+    label.style.marginRight = '0.5rem';
+    row.appendChild(label);
+    indices.forEach((globalIdx)=>{
+      const dw = document.createElement('div');
+      dw.className = 'dial-wrap';
+      dw.innerHTML = `
+        <div class="dial-arrows">
+          <div class="dial-btn" onclick="changeDial(${globalIdx},1)">▲</div>
+          <div class="dial-btn" onclick="changeDial(${globalIdx},-1)">▼</div>
+        </div>
+        <div class="dial-display" id="dial-${globalIdx}">0</div>`;
+      row.appendChild(dw);
+    });
+    wrap.appendChild(row);
+  });
+}
+
+function changeDial(i,dir){
+  dialValues[i]=(dialValues[i]+dir+10)%10;
+  const el=document.getElementById('dial-'+i);
+  el.textContent=dialValues[i];
+  el.style.color='var(--gold2)';
+  setTimeout(()=>el.style.color='var(--cream)',280);
+  sparkleAt(el.getBoundingClientRect().left+24,el.getBoundingClientRect().top+32,3);
+}
+
+function checkLock(){
+  const fb=document.getElementById('lock-feedback');
+  if(JSON.stringify(dialValues)===JSON.stringify(LOCK_ANSWER)){
+    fb.textContent='🔓 Click! The vault opens... ✨';
+    fb.style.color='#6de08a';fb.classList.add('show');
+    spawnHearts(12,window.innerWidth/2,window.innerHeight/2);
+    confettiBurst(35);
+    setTimeout(()=>{goTo('s4');buildWordPuzzle()},1500);
+  } else {
+    fb.textContent='❌ Not quite, Emi... check the hints again 💭';
+    fb.style.color='var(--pink)';fb.classList.add('show');
+    document.getElementById('lock-dials').classList.add('lock-shake');
+    setTimeout(()=>document.getElementById('lock-dials').classList.remove('lock-shake'),500);
+  }
+}
+
+// ═══ STAGE 4 — WORD PUZZLE ═══
+const SENTENCE=["You","are","my","everything","Emi"];
+let selectedWords=[];
+
+function buildWordPuzzle(){
+  selectedWords=[];
+  document.getElementById('slots-row').innerHTML='<span style="color:var(--muted);font-size:.82rem;font-style:italic">_ _ _ _ _</span>';
+  const shuffled=[...SENTENCE].sort(()=>Math.random()-.5);
+  const pw=document.getElementById('word-pieces');pw.innerHTML='';
+  shuffled.forEach((word,i)=>{
+    const btn=document.createElement('div');
+    btn.className='puzzle-piece';btn.id='wp-'+i;
+    btn.textContent=word;btn.onclick=()=>selectWord(word,btn);
+    pw.appendChild(btn);
+  });
+  document.getElementById('puzzle-feedback').textContent='';
+  document.getElementById('puzzle-feedback').classList.remove('show');
+}
+
+function selectWord(word,btn){
+  if(btn.classList.contains('used'))return;
+  selectedWords.push(word);btn.classList.add('used');
+  sparkleAt(btn.getBoundingClientRect().left+btn.offsetWidth/2,btn.getBoundingClientRect().top+20,3);
+  renderSlots();
+  if(selectedWords.length===SENTENCE.length)checkSentence();
+}
+
+function renderSlots(){
+  const slots=document.getElementById('slots-row');slots.innerHTML='';
+  selectedWords.forEach(w=>{
+    const sp=document.createElement('div');
+    sp.style.cssText='background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.35);border-radius:50px;padding:.3rem .75rem;font-size:.85rem;color:var(--cream);font-family:Raleway,sans-serif;cursor:pointer;margin:.15rem';
+    sp.textContent=w;sp.onclick=()=>removeWord(w);
+    slots.appendChild(sp);
+  });
+}
+
+function removeWord(word){
+  const idx=selectedWords.indexOf(word);
+  if(idx>-1)selectedWords.splice(idx,1);
+  document.querySelectorAll('.puzzle-piece').forEach(el=>{
+    if(el.textContent===word&&el.classList.contains('used')){el.classList.remove('used')}
+  });
+  renderSlots();document.getElementById('puzzle-feedback').textContent='';
+}
+
+function checkSentence(){
+  const fb=document.getElementById('puzzle-feedback');
+  if(JSON.stringify(selectedWords)===JSON.stringify(SENTENCE)){
+    fb.textContent='💖 Perfect. Every word, exactly right, Emi.';
+    fb.style.color='#6de08a';fb.classList.add('show');
+    confettiBurst(55);spawnHearts(22,window.innerWidth/2,window.innerHeight*.5);
+    setTimeout(()=>{goTo('s5');showFinalLetter()},1900);
+  } else {
+    fb.textContent='✨ Almost... the order isn\'t right. Try again!';
+    fb.style.color='var(--pink)';fb.classList.add('show');
+    setTimeout(()=>{
+      selectedWords=[];
+      document.querySelectorAll('.puzzle-piece').forEach(el=>el.classList.remove('used'));
+      renderSlots();fb.textContent='';fb.classList.remove('show');
+    },2000);
+  }
+}
+
+// ═══ STAGE 5 — FINAL LETTER ═══
+const LETTER=`💝 Emiyee 💖
+Happy Birthday, my love, my angel 👼
+
+I’ve been trying to find the perfect words to tell you just how much I love you but the truth is no language on Earth is big enough to hold what I feel for you Emebeten babe I don't even know what to say all I know is that I love you so deeply.😊
+
+May your birth be a blessin this day is like a second birthday to me My love because I found you I am the happiest person in the entire world😇 I love you far beyond any words I could ever say Ebakesh fkr be in my life forever.🥹
+
+Happy Birthday once again my everything🌏 I love you💖`;
+
+function showFinalLetter(){
+  setTimeout(()=>{
+    document.getElementById('final-card').classList.add('show');
+    typewriterLetter(document.getElementById('letter-out'),LETTER,16);
+    confettiBurst(90);
+    for(let i=0;i<14;i++){setTimeout(()=>{
+      const el=document.createElement('div');el.className='star-burst';
+      el.textContent=['✨','⭐','💫','🌟','🎀'][Math.floor(Math.random()*5)];
+      el.style.left=Math.random()*80+10+'vw';el.style.top=Math.random()*80+10+'vh';
+      document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+    },i*250)}
+    spawnHearts(30,window.innerWidth/2,window.innerHeight);
+  },500);
+}
+
+function typewriterLetter(el,text,speed){
+  el.innerHTML='';let i=0;
+  const iv=setInterval(()=>{
+    el.innerHTML=text.slice(0,i).replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+    i++;if(i>text.length)clearInterval(iv);
+  },speed);
+}
+
+// ═══ RESTART ═══
+function restartAll(){
+  tapCount=0;cracksAdded=0;comboCount=0;selectedWords=[];
+  document.getElementById('egg-count').textContent='0';
+  document.getElementById('ring-bar').style.strokeDashoffset='220';
+  document.getElementById('egg').style.filter='';
+  document.getElementById('egg').style.animation='';
+  document.getElementById('egg-body').setAttribute('fill','url(#eggGrad)');
+  document.getElementById('crack-group').innerHTML='';
+  document.getElementById('tap-hint').style.display='';
+  document.getElementById('egg-msg').textContent='';document.getElementById('egg-msg').classList.remove('show');
+  document.getElementById('lock-feedback').textContent='';document.getElementById('lock-feedback').classList.remove('show');
+  document.getElementById('puzzle-feedback').textContent='';
+  document.getElementById('letter-out').innerHTML='';
+  document.getElementById('final-card').classList.remove('show');
+  goTo('s1');
+}
+</script>
+</body>
+</html>
