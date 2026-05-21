@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Something is Waiting for You, Emi...</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Raleway:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -34,12 +34,15 @@ body::after{
 }
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-/* STAGES */
+/* STAGES – fully responsive & scrollable */
 .stage{
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;width:100vw;padding:1.2rem;
-  position:fixed;inset:0;z-index:10;text-align:center;
-  overflow-y:auto;
+  display:none;flex-direction:column;align-items:center;justify-content:flex-start;
+  width:100vw;height:100dvh; /* dynamic viewport height */
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  z-index:10;text-align:center;
+  overflow-y:auto;overflow-x:hidden;
+  padding:clamp(1rem, 5vw, 2rem) clamp(0.8rem, 4vw, 2rem);
+  -webkit-overflow-scrolling:touch; /* smooth scroll on iOS */
 }
 .stage.active{display:flex}
 .stage.in{animation:stageIn .9s cubic-bezier(.22,1,.36,1) both}
@@ -47,11 +50,12 @@ body::after{
 @keyframes stageIn{from{opacity:0;transform:scale(.93) translateY(30px)}to{opacity:1;transform:none}}
 @keyframes stageOut{from{opacity:1}to{opacity:0;transform:scale(1.04)}}
 
-/* CARD */
+/* CARD – flexible padding */
 .card{
   background:linear-gradient(145deg,rgba(25,15,40,.97),rgba(15,10,28,.99));
   border:1px solid rgba(255,107,157,.2);border-radius:20px;
-  padding:2rem 1.8rem;max-width:500px;width:100%;
+  padding:clamp(1.2rem, 5vw, 2rem) clamp(1rem, 4vw, 1.8rem);
+  max-width:500px;width:100%;margin:auto;
   box-shadow:0 0 0 1px rgba(255,107,157,.05),0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(255,107,157,.06),inset 0 1px 0 rgba(255,107,157,.15);
   position:relative;overflow:hidden;
 }
@@ -60,62 +64,31 @@ body::after{
   background:linear-gradient(90deg,transparent,var(--pink),transparent);
 }
 
-/* TYPOGRAPHY */
-h1{
-  font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,3rem);
-  font-weight:900;line-height:1.1;
-  background:linear-gradient(135deg,var(--pink2),var(--gold2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;
-}
-h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:700;color:var(--pink2);margin-bottom:.7rem}
-.script{font-family:'Dancing Script',cursive;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold2);line-height:1.3}
-p{font-size:.92rem;line-height:1.85;color:#c0a8c8;margin:.5rem 0}
-.small{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
-.tagline{font-size:1rem;font-style:italic;color:#d4b0d4;margin:.5rem 0}
+/* TYPOGRAPHY – responsive font sizes */
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem, 8vw, 3rem);font-weight:900;line-height:1.1;background:linear-gradient(135deg,var(--pink2),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem, 5vw, 2rem);font-weight:700;color:var(--pink2);margin-bottom:.7rem}
+.script{font-family:'Dancing Script',cursive;font-size:clamp(1.4rem, 6vw, 2.4rem);color:var(--gold2);line-height:1.3}
+p{font-size:clamp(0.85rem, 2.5vw, 0.95rem);line-height:1.85;color:#c0a8c8;margin:.5rem 0}
+.small{font-size:clamp(0.7rem, 2vw, 0.8rem);letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.tagline{font-size:clamp(0.9rem, 2.8vw, 1rem);font-style:italic;color:#d4b0d4;margin:.5rem 0}
 em{color:var(--pink2)}
 
-/* HEARTS */
+/* HEARTS, BURSTS, RIPPLE, SPARKLE, COMBO (unchanged) */
 .heart-float{position:fixed;pointer-events:none;z-index:9999;animation:heartRise linear forwards}
 @keyframes heartRise{0%{transform:translateY(0) scale(1) rotate(var(--r));opacity:1}100%{transform:translateY(-110vh) scale(.3) rotate(var(--r2));opacity:0}}
-
-/* TAP BURST */
-.tap-burst{
-  position:fixed;pointer-events:none;z-index:9999;
-  font-size:1.6rem;font-weight:bold;
-  animation:tapPop .7s cubic-bezier(.22,1,.36,1) forwards;
-  transform-origin:center;
-}
-@keyframes tapPop{
-  0%{transform:scale(0) translateY(0);opacity:1}
-  40%{transform:scale(1.4) translateY(-20px);opacity:1}
-  100%{transform:scale(.6) translateY(-60px);opacity:0}
-}
-
-/* RIPPLE */
-.ripple-ring{
-  position:fixed;pointer-events:none;z-index:9998;
-  border-radius:50%;border:3px solid var(--pink);
-  animation:rippleOut .6s ease-out forwards;
-}
+.tap-burst{position:fixed;pointer-events:none;z-index:9999;font-size:1.6rem;font-weight:bold;animation:tapPop .7s cubic-bezier(.22,1,.36,1) forwards;transform-origin:center}
+@keyframes tapPop{0%{transform:scale(0) translateY(0);opacity:1}40%{transform:scale(1.4) translateY(-20px);opacity:1}100%{transform:scale(.6) translateY(-60px);opacity:0}}
+.ripple-ring{position:fixed;pointer-events:none;z-index:9998;border-radius:50%;border:3px solid var(--pink);animation:rippleOut .6s ease-out forwards}
 @keyframes rippleOut{0%{width:20px;height:20px;opacity:.9;margin-left:-10px;margin-top:-10px}100%{width:120px;height:120px;opacity:0;margin-left:-60px;margin-top:-60px}}
-
-/* SPARKLE */
 .sparkle{position:fixed;pointer-events:none;z-index:9998;width:6px;height:6px;border-radius:50%;animation:sparkleOut .8s ease-out forwards}
 @keyframes sparkleOut{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
-
-/* COMBO TEXT */
-.combo-text{
-  position:fixed;pointer-events:none;z-index:9999;
-  font-family:'Dancing Script',cursive;font-size:1.4rem;font-weight:700;
-  color:var(--gold2);text-shadow:0 0 10px rgba(255,230,128,.6);
-  animation:comboRise .9s ease-out forwards;
-}
+.combo-text{position:fixed;pointer-events:none;z-index:9999;font-family:'Dancing Script',cursive;font-size:1.4rem;font-weight:700;color:var(--gold2);text-shadow:0 0 10px rgba(255,230,128,.6);animation:comboRise .9s ease-out forwards}
 @keyframes comboRise{0%{transform:translateY(0) scale(0.5);opacity:1}60%{transform:translateY(-40px) scale(1.1);opacity:1}100%{transform:translateY(-80px) scale(.8);opacity:0}}
 
-/* BUTTONS */
+/* BUTTONS – responsive tap targets */
 .btn{
-  display:inline-block;margin:.4rem;padding:.75rem 1.8rem;
-  font-family:'Raleway',sans-serif;font-size:.8rem;font-weight:600;
+  display:inline-block;margin:.4rem;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 4vw, 1.8rem);
+  font-family:'Raleway',sans-serif;font-size:clamp(0.7rem, 2vw, 0.85rem);font-weight:600;
   letter-spacing:2.5px;text-transform:uppercase;
   background:linear-gradient(135deg,var(--pink),var(--rose));
   color:#fff;border:none;border-radius:50px;cursor:pointer;
@@ -128,44 +101,41 @@ em{color:var(--pink2)}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e0a800);color:#1a0a00;box-shadow:0 4px 20px rgba(245,200,66,.35)}
 .btn-gold:hover{box-shadow:0 8px 30px rgba(245,200,66,.55)}
 
-/* EGG */
+/* EGG – responsive size */
 .egg-container{
-  position:relative;width:180px;height:216px;margin:.6rem auto;
-  cursor:pointer;filter:drop-shadow(0 0 30px rgba(255,107,157,.3));
+  position:relative;width:min(160px, 40vw);height:auto;aspect-ratio:180/216;
+  margin:.6rem auto;cursor:pointer;filter:drop-shadow(0 0 30px rgba(255,107,157,.3));
   transition:filter .2s;user-select:none;-webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation; /* mobile fix */
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
 }
 .egg-container:active{transform:scale(.94)}
-.egg-counter{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--pink2);line-height:1}
+.egg-counter{font-family:'Playfair Display',serif;font-size:clamp(2rem, 6vw, 2.5rem);font-weight:900;color:var(--pink2);line-height:1}
 .egg-counter.pop{animation:popNum .18s ease both}
 @keyframes popNum{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
 .progress-ring-wrap{position:relative;width:80px;height:80px;margin:0 auto .6rem}
 .progress-ring-bg{fill:none;stroke:rgba(255,107,157,.1);stroke-width:5}
 .progress-ring-bar{fill:none;stroke:url(#ringGrad);stroke-width:5;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .25s ease}
-.egg-msg{min-height:1.3rem;font-size:.83rem;font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
+.egg-msg{min-height:1.3rem;font-size:clamp(0.78rem, 2.2vw, 0.88rem);font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
 .egg-msg.show{opacity:1}
-.egg-tap-hint{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:.4rem;animation:blink2 1.5s ease-in-out infinite}
+.egg-tap-hint{font-size:clamp(0.62rem, 1.8vw, 0.72rem);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:.4rem;animation:blink2 1.5s ease-in-out infinite}
 @keyframes blink2{0%,100%{opacity:.4}50%{opacity:1}}
 
-/* LOCK DIALS */
+/* LOCK DIALS – compact & responsive */
 .lock-dials{
-  display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1rem 0;
+  display:flex;flex-direction:column;align-items:center;gap:clamp(0.6rem, 2vw, 1rem);margin:1rem 0;
 }
 .dial-row{
-  display:flex;gap:.5rem;justify-content:center;align-items:center;
+  display:flex;gap:clamp(0.3rem, 1.5vw, 0.5rem);justify-content:center;align-items:center;flex-wrap:wrap;
 }
-.dial-wrap{
-  display:flex;flex-direction:column;align-items:center;gap:.2rem;
-}
+.dial-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .dial-display{
-  width:48px;height:64px;background:rgba(255,255,255,.04);
+  width:clamp(40px, 10vw, 48px);height:clamp(54px, 13vw, 64px);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,107,157,.25);border-radius:10px;
-  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--cream);
+  font-family:'Playfair Display',serif;font-size:clamp(1.4rem, 5vw, 1.8rem);font-weight:700;color:var(--cream);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;position:relative;overflow:hidden;transition:all .2s;
-  box-shadow:inset 0 2px 10px rgba(0,0,0,.4);user-select:none;
-  touch-action:manipulation;
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.4);user-select:none;touch-action:manipulation;
 }
 .dial-display:hover{border-color:var(--pink);box-shadow:0 0 20px rgba(255,107,157,.2),inset 0 2px 10px rgba(0,0,0,.4)}
 .dial-display::before,.dial-display::after{content:'';position:absolute;left:0;right:0;height:18px;pointer-events:none;z-index:2}
@@ -173,46 +143,44 @@ em{color:var(--pink2)}
 .dial-display::after{bottom:0;background:linear-gradient(to top,rgba(13,5,20,.85),transparent)}
 .dial-arrows{display:flex;gap:4px}
 .dial-btn{
-  width:24px;height:24px;border-radius:50%;
+  width:clamp(22px, 5vw, 26px);height:clamp(22px, 5vw, 26px);border-radius:50%;
   background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.25);
-  color:var(--pink2);font-size:.75rem;cursor:pointer;
+  color:var(--pink2);font-size:0.75rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .2s;
 }
 .dial-btn:hover{background:rgba(255,107,157,.3);transform:scale(1.1)}
-.dial-label{font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
-.lock-hint{
-  font-size:.85rem;color:#c0a8c8;
-  background:rgba(255,107,157,.06);border-left:2px solid var(--pink);
-  padding:.7rem 1rem;border-radius:0 8px 8px 0;margin:.8rem 0;text-align:left;line-height:1.7;
-}
+.dial-label{font-size:clamp(0.55rem, 1.8vw, 0.65rem);letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.lock-hint{font-size:clamp(0.8rem, 2.2vw, 0.9rem);color:#c0a8c8;background:rgba(255,107,157,.06);border-left:2px solid var(--pink);padding:clamp(0.6rem, 2vw, 0.8rem) clamp(0.8rem, 2vw, 1rem);border-radius:0 8px 8px 0;margin:.8rem 0;text-align:left;line-height:1.7}
 .lock-hint ol{padding-left:1.2rem;margin-top:.4rem}
-.lock-hint li{margin:.25rem 0;font-size:.82rem}
+.lock-hint li{margin:.25rem 0;font-size:clamp(0.78rem, 2vw, 0.85rem)}
 .lock-shake{animation:lockShake .4s ease}
 @keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}60%{transform:translateX(12px)}80%{transform:translateX(-6px)}}
 
-/* WORD PUZZLE */
+/* WORD PUZZLE – flexible pieces */
 .puzzle-piece{
-  padding:.4rem .85rem;border-radius:50px;
-  background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.3);
-  font-size:.85rem;font-weight:600;color:var(--cream);cursor:pointer;
-  transition:all .2s;font-family:'Raleway',sans-serif;letter-spacing:1px;
+  padding:clamp(0.3rem, 1.5vw, 0.4rem) clamp(0.7rem, 2vw, 0.85rem);
+  border-radius:50px;background:rgba(255,107,157,.12);
+  border:1px solid rgba(255,107,157,.3);
+  font-size:clamp(0.8rem, 2.2vw, 0.9rem);font-weight:600;color:var(--cream);
+  cursor:pointer;transition:all .2s;font-family:'Raleway',sans-serif;letter-spacing:1px;
+  white-space:nowrap;
 }
 .puzzle-piece:hover{background:rgba(255,107,157,.28);transform:scale(1.08)}
 .puzzle-piece.used{opacity:.22;pointer-events:none;background:rgba(255,107,157,.04)}
 
-/* FINAL LETTER */
+/* FINAL LETTER – scrollable inside stage */
 .letter-scroll{
   background:linear-gradient(160deg,rgba(25,10,35,.98),rgba(18,8,28,.99));
   border:1px solid rgba(245,200,66,.25);border-radius:16px;
-  padding:2rem 1.8rem;max-width:500px;width:100%;
+  padding:clamp(1.2rem, 5vw, 2rem) clamp(1rem, 4vw, 1.8rem);
+  max-width:500px;width:100%;margin:auto auto 120px auto; /* space for fixed button */
   box-shadow:0 0 0 1px rgba(245,200,66,.05),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(245,200,66,.06);
-  position:relative;overflow:hidden;margin:auto;
-  margin-bottom:100px; /* space for fixed button */
+  position:relative;overflow:hidden;
 }
 .letter-scroll::before,.letter-scroll::after{content:'';position:absolute;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .letter-scroll::before{top:0}.letter-scroll::after{bottom:0}
 .letter-text{
-  font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;
+  font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;
   line-height:2;color:#d4c0e0;text-align:left;
   border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;margin:1rem 0;
 }
@@ -220,15 +188,15 @@ em{color:var(--pink2)}
 #final-card.show{opacity:1;transform:none}
 
 /* MISC */
-.fancy-divider{display:flex;align-items:center;gap:.7rem;margin:1rem 0;opacity:.5}
+.fancy-divider{display:flex;align-items:center;gap:clamp(0.5rem, 2vw, 0.8rem);margin:1rem 0;opacity:.5}
 .fancy-divider::before,.fancy-divider::after{content:'';flex:1;height:1px}
 .fancy-divider::before{background:linear-gradient(90deg,transparent,var(--pink))}
 .fancy-divider::after{background:linear-gradient(90deg,var(--pink),transparent)}
-.fancy-divider span{font-size:1rem;color:var(--pink)}
+.fancy-divider span{font-size:clamp(0.9rem, 3vw, 1.1rem);color:var(--pink)}
 .dots-row{display:flex;gap:8px;justify-content:center;margin-bottom:1.2rem}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,107,157,.15);border:1px solid rgba(255,107,157,.2);transition:all .5s ease}
 .dot.done{background:var(--pink);box-shadow:0 0 8px var(--pink);transform:scale(1.3)}
-.egg-msg-feedback{min-height:1.2rem;font-size:.82rem;font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
+.egg-msg-feedback{min-height:1.2rem;font-size:clamp(0.78rem, 2.2vw, 0.85rem);font-style:italic;color:var(--pink2);margin-top:.3rem;opacity:0;transition:opacity .3s}
 .egg-msg-feedback.show{opacity:1}
 .confetti-piece{position:fixed;top:-20px;border-radius:3px;animation:confettiFall linear forwards;z-index:9999;pointer-events:none}
 @keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
@@ -236,16 +204,11 @@ em{color:var(--pink2)}
 @keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.8) rotate(180deg);opacity:0}}
 @keyframes pulse-ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
 
-/* FIXED RESTART BUTTON */
+/* FIXED RESTART BUTTON – always visible */
 .fixed-restart-btn{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:9999;
-  padding:.75rem 2rem;
-  font-size:.85rem;
-  white-space:nowrap;
+  position:fixed;bottom:25px;left:50%;transform:translateX(-50%);
+  z-index:9999;padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);
+  font-size:clamp(0.75rem, 2vw, 0.9rem);white-space:nowrap;
   box-shadow:0 0 30px rgba(245,200,66,.5);
 }
 </style>
@@ -255,9 +218,9 @@ em{color:var(--pink2)}
 
 <!-- ════════ STAGE 1 — INTRO ════════ -->
 <div class="stage active in" id="s1">
-  <div style="position:relative;display:flex;align-items:center;justify-content:center;width:150px;height:150px;margin:0 auto 1.5rem">
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;width:min(150px,30vw);height:min(150px,30vw);margin:0 auto 1.5rem">
     <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,107,157,.25);animation:pulse-ring 2s ease infinite"></div>
-    <span style="font-size:5.5rem">💌</span>
+    <span style="font-size:clamp(4rem, 12vw, 5.5rem)">💌</span>
   </div>
   <div class="card">
     <div class="dots-row"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
@@ -265,8 +228,8 @@ em{color:var(--pink2)}
     <h1>Something Arrived<br><em style="-webkit-text-fill-color:unset;font-style:italic;font-size:.65em;color:var(--pink2)">for you.</em></h1>
     <div class="fancy-divider"><span>💌</span></div>
     <p class="tagline">Ermi left something hidden inside.<br>You'll have to earn it. 💕</p>
-    <p style="font-size:.86rem">You'll need to <em>crack it open</em>, <em style="color:var(--gold2)">decode it</em>,<br>and <em style="color:var(--lavender)">piece it together</em>...</p>
-    <p style="font-size:.73rem;margin-top:.7rem;color:var(--muted)">Are you brave enough, Emi? 😉</p>
+    <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">You'll need to <em>crack it open</em>, <em style="color:var(--gold2)">decode it</em>,<br>and <em style="color:var(--lavender)">piece it together</em>...</p>
+    <p style="font-size:clamp(0.7rem,2vw,0.8rem);margin-top:.7rem;color:var(--muted)">Are you brave enough, Emi? 😉</p>
     <div style="margin-top:1.4rem">
       <button class="btn" onclick="startJourney()">Open the Letter ✨</button>
     </div>
@@ -279,7 +242,7 @@ em{color:var(--pink2)}
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="small">stage one · Emi's challenge</div>
     <h2>Break the Egg 🥚</h2>
-    <p style="font-size:.86rem">Something precious is hiding inside.<br>Tap it <strong style="color:var(--pink2)">30 times</strong> to set it free!</p>
+    <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Something precious is hiding inside.<br>Tap it <strong style="color:var(--pink2)">30 times</strong> to set it free!</p>
     <div class="progress-ring-wrap" style="margin-top:.8rem">
       <svg width="80" height="80" viewBox="0 0 80 80">
         <defs>
@@ -293,7 +256,7 @@ em{color:var(--pink2)}
       </svg>
       <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
         <div class="egg-counter" id="egg-count">0</div>
-        <div style="font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase">/ 30</div>
+        <div style="font-size:clamp(0.55rem,1.8vw,0.62rem);letter-spacing:2px;color:var(--muted);text-transform:uppercase">/ 30</div>
       </div>
     </div>
     <div class="egg-container" id="egg" onpointerdown="tapEgg(event); event.preventDefault()">
@@ -326,14 +289,14 @@ em{color:var(--pink2)}
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="small">stage two · the vault</div>
     <h2>🔐 The Love Vault</h2>
-    <p style="font-size:.86rem">Ermi locked something away. Solve the clues to open it.</p>
+    <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Ermi locked something away. Solve the clues to open it.</p>
     <div class="lock-hint">
-      <strong style="color:var(--pink2);font-size:.82rem;letter-spacing:1px">YOUR 6-DIGIT CODE:</strong>
+      <strong style="color:var(--pink2);font-size:clamp(0.8rem,2.2vw,0.85rem);letter-spacing:1px">YOUR 6-DIGIT CODE:</strong>
       <ol>
         <li>Letters in the word <strong style="color:var(--pink2)">LOVE</strong> = <em style="color:var(--gold2)">?</em></li>
-        <li>Your birthday date = <em style="color:var(--gold2)">? ?</em> <span style="color:var(--muted);font-size:.75rem">(two digits)</span></li>
+        <li>Your birthday date = <em style="color:var(--gold2)">? ?</em> <span style="color:var(--muted);font-size:0.75rem">(two digits)</span></li>
         <li>Your birth month = <em style="color:var(--gold2)">?</em></li>
-        <li>This year = <em style="color:var(--gold2)">? ? ? ?</em> <span style="color:var(--muted);font-size:.75rem">(four digits)</span></li>
+        <li>This year = <em style="color:var(--gold2)">? ? ? ?</em> <span style="color:var(--muted);font-size:0.75rem">(four digits)</span></li>
       </ol>
     </div>
     <div class="lock-dials" id="lock-dials"></div>
@@ -350,18 +313,18 @@ em{color:var(--pink2)}
     <div class="dots-row"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
     <div class="small">stage three · complete the feeling</div>
     <h2>💝 What Did Ermi Want to Say?</h2>
-    <p style="font-size:.86rem">Tap the words <em>in the right order</em> to reveal his message.</p>
-    <p style="font-size:.8rem;color:var(--gold2);font-style:italic;margin:.3rem 0;">✨ Hint: Ermi’s daily truth 🌟</p>
+    <p style="font-size:clamp(0.8rem,2.2vw,0.9rem)">Tap the words <em>in the right order</em> to reveal his message.</p>
+    <p style="font-size:clamp(0.75rem,2vw,0.85rem);color:var(--gold2);font-style:italic;margin:.3rem 0;">✨ Hint: Ermi’s daily truth 🌟</p>
     <div class="fancy-divider"><span>✨</span></div>
     <div id="slots-row" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:.8rem 0;min-height:50px;align-items:center"></div>
-    <div style="font-size:.68rem;letter-spacing:2px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase">Tap words in the correct order ↓</div>
+    <div style="font-size:clamp(0.62rem,1.8vw,0.7rem);letter-spacing:2px;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase">Tap words in the correct order ↓</div>
     <div id="word-pieces" style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:.6rem 0"></div>
     <p class="egg-msg-feedback" id="puzzle-feedback"></p>
   </div>
 </div>
 
 <!-- ════════ STAGE 5 — FINAL LETTER (scrollable + fixed button) ════════ -->
-<div class="stage" id="s5" style="justify-content:flex-start;padding-top:2rem;padding-bottom:120px;">
+<div class="stage" id="s5" style="padding-bottom:140px;">
   <div class="letter-scroll" id="final-card">
     <div style="text-align:center;margin-bottom:1rem">
       <div class="small">the surprise is yours, Emi</div>
@@ -623,7 +586,7 @@ let selectedWords=[];
 
 function buildWordPuzzle(){
   selectedWords=[];
-  document.getElementById('slots-row').innerHTML='<span style="color:var(--muted);font-size:.82rem;font-style:italic">_ _ _ _ _</span>';
+  document.getElementById('slots-row').innerHTML='<span style="color:var(--muted);font-size:clamp(0.78rem,2.2vw,0.85rem);font-style:italic">_ _ _ _ _</span>';
   const shuffled=[...SENTENCE].sort(()=>Math.random()-.5);
   const pw=document.getElementById('word-pieces');pw.innerHTML='';
   shuffled.forEach((word,i)=>{
@@ -648,7 +611,7 @@ function renderSlots(){
   const slots=document.getElementById('slots-row');slots.innerHTML='';
   selectedWords.forEach(w=>{
     const sp=document.createElement('div');
-    sp.style.cssText='background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.35);border-radius:50px;padding:.3rem .75rem;font-size:.85rem;color:var(--cream);font-family:Raleway,sans-serif;cursor:pointer;margin:.15rem';
+    sp.style.cssText='background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.35);border-radius:50px;padding:.3rem .75rem;font-size:clamp(0.8rem,2.2vw,0.9rem);color:var(--cream);font-family:Raleway,sans-serif;cursor:pointer;margin:.15rem';
     sp.textContent=w;sp.onclick=()=>removeWord(w);
     slots.appendChild(sp);
   });
