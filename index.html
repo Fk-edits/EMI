@@ -146,16 +146,14 @@ em{color:var(--pink2)}
 
 /* FINAL LETTER – BIG & FULL HEIGHT */
 #s5.stage{
-  display:flex;flex-direction:column;align-items:center;
   padding-top:clamp(1rem, 4vw, 1.5rem);
-  padding-bottom:calc(80px + env(safe-area-inset-bottom, 0px)); /* clear the fixed button */
+  padding-bottom:calc(80px + env(safe-area-inset-bottom, 0px));
 }
 .letter-scroll{
   background:linear-gradient(160deg,rgba(25,10,35,.98),rgba(18,8,28,.99));
   border:1px solid rgba(245,200,66,.25);border-radius:16px;
   padding:clamp(1.2rem, 5vw, 2rem) clamp(1rem, 4vw, 1.8rem);
-  max-width:500px;width:100%;
-  flex:1 1 auto;                  /* fills available vertical space */
+  max-width:500px;width:100%;flex:1 1 auto;
   margin:0 auto;
   box-shadow:0 0 0 1px rgba(245,200,66,.05),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(245,200,66,.06);
   position:relative;overflow:hidden;
@@ -167,9 +165,7 @@ em{color:var(--pink2)}
   font-family:'Playfair Display',serif;font-size:clamp(0.9rem, 2.5vw, 1rem);font-style:italic;
   line-height:2;color:#d4c0e0;text-align:left;
   border-left:2px solid rgba(245,200,66,.3);padding-left:1rem;
-  margin:1rem 0;
-  flex:1 1 auto;                 /* allow text to take up space */
-  overflow-y:auto;               /* in case it ever overflows */
+  margin:1rem 0;flex:1 1 auto;overflow-y:auto;
 }
 #final-card{opacity:0;transform:translateY(40px) scale(.95);transition:all 1s cubic-bezier(.34,1.56,.64,1)}
 #final-card.show{opacity:1;transform:none}
@@ -191,17 +187,17 @@ em{color:var(--pink2)}
 @keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1.8) rotate(180deg);opacity:0}}
 @keyframes pulse-ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
 
-/* FIXED RESTART BUTTON – right at the bottom */
+/* FIXED RESTART BUTTON – hidden by default, shown only on final stage */
 .fixed-restart-btn{
   position:fixed;
   bottom:calc(15px + env(safe-area-inset-bottom, 0px));
-  left:50%;
-  transform:translateX(-50%);
+  left:50%;transform:translateX(-50%);
   z-index:9999;
   padding:clamp(0.6rem, 2vw, 0.8rem) clamp(1.4rem, 4vw, 2rem);
   font-size:clamp(0.75rem, 2vw, 0.9rem);
   white-space:nowrap;
   box-shadow:0 0 30px rgba(245,200,66,.5);
+  display:none; /* will be shown via JS */
 }
 </style>
 </head>
@@ -327,7 +323,7 @@ em{color:var(--pink2)}
   </div>
 </div>
 
-<!-- ════════ STAGE 5 — FINAL LETTER (big box, full text, fixed button) ════════ -->
+<!-- ════════ STAGE 5 — FINAL LETTER (big box, no image inside) ════════ -->
 <div class="stage" id="s5">
   <div class="letter-scroll" id="final-card">
     <div style="text-align:center;margin-bottom:1rem">
@@ -342,9 +338,10 @@ em{color:var(--pink2)}
       <div class="script" style="font-size:1.2rem;color:var(--pink2)">Forever yours, Ermi 💕</div>
     </div>
   </div>
-  <!-- Fixed Restart Button – always at the bottom -->
-  <button class="btn-gold btn fixed-restart-btn" onclick="restartAll()">✨ Read Again ✨</button>
 </div>
+
+<!-- FIXED RESTART BUTTON (hidden by default, only shown on final letter) -->
+<button class="btn-gold btn fixed-restart-btn" id="restart-btn" onclick="restartAll()">✨ Read Again ✨</button>
 
 <script>
 // ═══ BG CANVAS ═══
@@ -430,7 +427,10 @@ function confettiBurst(n=80){
 }
 
 // ═══ STAGE 1 ═══
-function startJourney(){spawnHearts(6,window.innerWidth/2,window.innerHeight*.7);goTo('s2')}
+function startJourney(){
+  spawnHearts(6,window.innerWidth/2,window.innerHeight*.7);
+  goTo('s2');
+}
 
 // ═══ STAGE 2 — EGG (30 taps) ═══
 let tapCount=0;
@@ -558,6 +558,8 @@ May your birth be a blessin this day is like a second birthday to me My love bec
 Happy Birthday once again my everything🌏 I love you💖`;
 
 function showFinalLetter(){
+  // Show the fixed restart button
+  document.getElementById('restart-btn').style.display = 'block';
   setTimeout(()=>{
     document.getElementById('final-card').classList.add('show');
     typewriterLetter(document.getElementById('letter-out'),LETTER,16);
@@ -570,6 +572,8 @@ function typewriterLetter(el,text,speed){el.innerHTML='';let i=0;const iv=setInt
 
 // ═══ RESTART ═══
 function restartAll(){
+  // Hide the restart button again
+  document.getElementById('restart-btn').style.display = 'none';
   tapCount=0;cracksAdded=0;comboCount=0;selectedWords=[];
   document.getElementById('egg-count').textContent='0';
   document.getElementById('ring-bar').style.strokeDashoffset='220';
